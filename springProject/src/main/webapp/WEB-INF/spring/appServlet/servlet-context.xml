@@ -23,6 +23,34 @@
 	
 	<context:component-scan base-package="com.kh.spring" />
 	
+	<!--  *사용자가 어떤 url로 요청시 해당 이문서가 읽혀진다고 보면된다 
+		  HandlerMapping을 통해서 어떤url로 요청시 어떤controller를 구동시킬지 알아내야한다.
+		  
+		  1.요청때마다 실행될 Controller 클래스들이 빈으로 등록되어 있어야함
+		  2.어떤 url로 요청시 어떤 controller를 구동시킬껀지 매핑시키는  HandlerMapping 관련한 클래스를 빈으로 등록해야됨
+		
+		//1번 
+		<beans:bean class="com.kh.spring.member.controller.LoginController" id="loginController"/>
+		<beans:been class="com.kh.spring.member.controller.LogOutController" id=logoutController"/>
+			  
+		//2번
+		<beans:bean class="org.springframework.servlet.handler.simpleUrlHandlerMapping>
+			<beans:property name="mappings">
+				<beans:props>
+					<beans:prop key="login.me">loginController</beans:prop>
+					<beans:prop key="logout.me">logoutController</beans:prop>
+				</beans:props>
+			</beands:property>
+		</beans:bean>
+		
+	-->
 	
+	<!-- 우의 방식이 xml방식
+		=>장점 : xml 문서내에 한 눈에 볼 수 있어서 관리의 편의성은 높음
+		=>단점 : 단, bean개수가 많아지면 오히려 관리하기 어려움 / 여러 개발자가 같은 xml 파일을 수정하면 충돌이 발생 될 수 있다.
+	-->
+	
+	
+		
 	
 </beans:beans>
