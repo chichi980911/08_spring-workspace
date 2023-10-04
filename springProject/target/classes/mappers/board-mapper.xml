@@ -4,12 +4,22 @@
 
 	<resultMap id="boardResult" type="Board">
 		<result column="board_no" property="boardNo"></result>
-		<result column="" property=""></result>
-		<result column="" property=""></result>
-		<result column="" property=""></result>
-		
-	
+		<result column="board_title" property="boardTitle"></result>
+		<result column="board_writer" property="boardWriter"></result>
+		<result column="create_date" property="createDate"></result>
+		<result column="origin_name" property="originName"></result>
 	</resultMap>
+	
+	<resultMap id="BoardResultSet" type="Board">
+		<result column="board_no" property="boardNo"></result>
+		<result column="board_title" property="boardTitle"></result>
+		<result column="board_writer" property="boardWriter"></result>
+		<result column="create_date" property="createDate"></result>
+		<result column="origin_name" property="originName"></result>
+		<result column="change_name" property="changeName"></result>
+	</resultMap>
+	
+	
 
 	<select id="selectListCount" resultType="_int">
 		select
@@ -18,7 +28,7 @@
 		   where status = 'Y'
 	</select>
 	
-	<select id="selectList" resultMap="">
+	<select id="selectList" resultMap="boardResult" parameterType="Board">
 		select	
 				board_no
 			   ,board_title
@@ -31,6 +41,45 @@
 		order
 			by board_no desc
 	</select>
-
+	<insert id="insertBoard">
+		insert
+			into board
+			(
+			   board_no
+			  ,board_title
+			  ,board_writer
+			  ,board_content
+			  ,origin_name
+			  ,change_name				
+			)
+			values
+			(
+			   seq_bno.nextval
+			  ,#{boardTitle}
+			  ,#{boardWriter}
+			  ,#{boardContent}
+			  ,#{originName}
+			  ,#{changeName} 
+			)
+	</insert>
+	<update id=increaseCount>
+		update
+			board
+		set count = count +1
+		 where board_no = ${bno}
+	</update>
+	
+	<select id="selectBoard" resultMap="BoardResultSet" parameterType="Board">
+		select
+			  board_title
+			 ,board_writer
+			 ,board_content
+			 ,origin_name
+			 ,change_name
+			 ,create_date
+		from board
+			where status = 'Y'
+			and board_no = ${bno}
+	</select>
 </mapper>
 

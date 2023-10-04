@@ -2,7 +2,7 @@ package com.kh.spring.common.template;
 
 import com.kh.spring.common.model.vo.PageInfo;
 
-public class Pagination {
+public class PageNation {
 
 	public static PageInfo getPageInfo(int listCount, int currentPage, int pageLimit, int boardLimit) {
 		
@@ -17,3 +17,5 @@ public class Pagination {
 		return new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
 	}
 }
+
+

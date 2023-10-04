@@ -192,7 +192,7 @@ public class MemberController {
 		// loginMember userPwd 필드 : db에 기록된 비번(암호문)
 		
 		// matches("평문비번", "암호화비번") : boolean 반환, 두 인자가 일치하면 true 반환 
-		if(loginMember != null && bcryptPasswordEncoder.matches(m.getuserPwd(), loginMember.getUserPwd())) { // Id로 조회된 loginMember 객체가 있으면서 평문비번과 암호화비번이 같은 경우
+		if(loginMember != null && bcryptPasswordEncoder.matches(m.getUserPwd(), loginMember.getUserPwd())) { // Id로 조회된 loginMember 객체가 있으면서 평문비번과 암호화비번이 같은 경우
 			// 로그인 성공
 			session.setAttribute("loginMember", loginMember);
 			mv.setViewName("redirect:/");
