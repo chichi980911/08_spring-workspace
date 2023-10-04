@@ -148,6 +148,7 @@ public class BoardController {
 	public String selectBoard(int bno, Model model,HttpSession session) {
 		//bno에는 상세조회하고자 하는 게시글 번호가 담겨있다. 
 		//해당 게시글 조회수 증가 서비스 호출결과 받기(update 하고 옴)
+		
 		int result = bservice.increaseCount(bno);
 		
 		if(result>0) {

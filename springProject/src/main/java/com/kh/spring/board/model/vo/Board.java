@@ -21,4 +21,5 @@ public class Board {
 	 private int count;
 	 private String createDate;
 	 private String status;
+	
 }

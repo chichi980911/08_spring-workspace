@@ -10,14 +10,14 @@
 		<result column="origin_name" property="originName"></result>
 	</resultMap>
 	
-	<resultMap id="BoardResultSet" type="Board">
+	<!-- <resultMap id="BoardResultSet" type="Board">
 		<result column="board_no" property="boardNo"></result>
 		<result column="board_title" property="boardTitle"></result>
 		<result column="board_writer" property="boardWriter"></result>
 		<result column="create_date" property="createDate"></result>
 		<result column="origin_name" property="originName"></result>
 		<result column="change_name" property="changeName"></result>
-	</resultMap>
+	</resultMap>  -->
 	
 	
 
@@ -62,14 +62,14 @@
 			  ,#{changeName} 
 			)
 	</insert>
-	<update id=increaseCount>
+	<!--  <update id=increaseCount>
 		update
 			board
 		set count = count +1
-		 where board_no = ${bno}
-	</update>
+		 where board_no = 17
+	</update>   -->
 	
-	<select id="selectBoard" resultMap="BoardResultSet" parameterType="Board">
+	<!-- <select id="selectBoard" >
 		select
 			  board_title
 			 ,board_writer
@@ -79,7 +79,7 @@
 			 ,create_date
 		from board
 			where status = 'Y'
-			and board_no = ${bno}
-	</select>
+			and board_no = #{bno}
+	</select>   -->
 </mapper>
 
