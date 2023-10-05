@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,6 +78,11 @@ public class BoardController {
 		//WEB-INF/views/board/boardEnrollForm.jsp
 		return "board/boardEnrollForm";
 	}
+	
+	
+	//다중 파일 업로드 기능시?
+	//여러개의 input type="file" 요소에 동일한 키값 으로 부여 
+	//받아올 때 배열 형식으로 받아오면 된다.  MultipartFile[]
 	@RequestMapping("insert.bo")
 	public String insertBoard(Board b,MultipartFile upfile,HttpSession session,Model model) {
 		
@@ -155,7 +162,7 @@ public class BoardController {
 			Board b = bservice.selectBoard(bno);
 			
 			session.setAttribute("b", b);
-			return "redirect:board/boardDetailView";
+			return "board/boardDetailView";
 			
 		}else {
 			model.addAttribute("errorMsg","게시물 조회에 실패했습니다.");
@@ -170,6 +177,80 @@ public class BoardController {
 		//>> 조회수 증가 실패
 		//에러문구담아서 에러페이지 포워딩
 		//
+	}
+	
+	@RequestMapping("delete.bo")
+	public String deleteBoard(int bno,String filePath,Model model,HttpSession session){//filepath = changeNmae
+		int result = bservice.deleteBoard(bno);
+		
+		//삭제성공
+		if(result>0) {
+		
+			//첨부파일이 있을 경우 => 파일 삭제
+			if(!filePath.equals("")){
+				new File(session.getServletContext().getRealPath(filePath)).delete();
+				}
+				//게시판 리스트 페이지 list.bo url 재요청
+			session.setAttribute("alertMsg", "성공적으로 게시글이 삭제되었습니다");
+			return "redirect:list.bo";
+		}else{
+			model.addAttribute("errorMsg","게시글삭제실패");
+			return "common/errorPage";
+		}
+	}
+	
+	@RequestMapping("updateForm.bo")
+	public String updateForm(int bno,Model model){
+		model.addAttribute("b",bservice.selectBoard(bno));
+		return "board/boardUpdateForm";
+	}
+	
+	@RequestMapping("update.bo")
+	public String updateBoard(@ModelAttribute Board b,MultipartFile reupfile,HttpSession session,Model model){
+		
+		//새로넘어온 첨부파일이 있을 경우
+		if(!reupfile.getOriginalFilename().equals("")) {
+			//기존 첨부파일이 있었을 경우 => 기존 첨부파일 지우기
+			if(b.getOriginName()!= null) {
+				new File(session.getServletContext().getRealPath(b.getChangeName())).delete();
+			}
+			//새로 넘어온 첨부파일 서버 업로드 시키기
+			String changeName = saveFile(reupfile, session);
+			
+			//b에 넘어온 첨부파일에 대한 원본명, 저장경로 담기
+			b.setOriginName(reupfile.getOriginalFilename());
+			b.setChangeName("resources/uploadFiles/" + changeName);
+			
+		}
+			/*
+			 * b에 boardNo,boardTitle, boardContent 무조건 담겨있음
+			 * 
+			 * 1.새로 첨부된 파일 x, 기존 첨부파일 x
+			 * =>originName:null changeName :null
+			 * 
+			 * 2.새로 첨부된 파일 x, 기존 첨부파일 o
+			 * =>originName: 기존첨파원본명, changeName : 기존첨파저장경로
+			 * 
+			 * 3.새로 첨부된 파일 o, 기존 첨부파일 x
+			 * =>새로 첨부된 파일을 서버 업로드 saveFile로
+			 * =>originName : 새로운 첨부파일 원본명, changeName:새로운 첨부파일 저장경로
+			 * 
+			 * 4.새로 첨부된 파일 o ,기존 첨부파일 o
+			 * =>기존 첨부파일 삭제 
+			 * =>새로 전달된 파일 서버에 업로드
+			 * =>originName : 새로운 첨부파일 원본명, changeName : 새로운 첨부파일 저장경로
+			 * 
+			 * */
+			
+			int result = bservice.updateBoard(b);
+			
+			if(result > 0) {//수정 성공 => 상세페이지
+				session.setAttribute("alertMsg", "수정 성공");
+				return "redirect:detail.bo?bno=" + b.getBoardNo();
+			}else {//수정 실패 => 에러페이지
+				model.addAttribute("errorMsg","수정 실패");
+				return "common/errorPage";
+		}
 	}
 }
 	

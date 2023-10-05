@@ -26,7 +26,7 @@
             <h2>게시글 상세보기</h2>
             <br>
             
-            <a class="btn btn-secondary" style="float:right" href="">목록으로</a>
+            <a class="btn btn-secondary" style="float:right" href="list.bo">목록으로</a>
             <br><br>
             <table id="contentArea" align="center" class="table">
                 <tr>
@@ -48,7 +48,7 @@
                     			첨부파일이 없습니다.
 							</c:when>
 							<c:otherwise>
-                        	<a href="${b.changeName }" download="${b.originName }">해당첨부파일 원본명</a>
+                        	<a href="${b.changeName }" download="${b.originName }">${b.originName}</a>
                        		 </c:otherwise>
                         </c:choose>
                     </td>
@@ -62,12 +62,28 @@
                 </tr>
             </table>
             <br>
-
-            <div align="center">
-                <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
-	                <a class="btn btn-primary" onclick="">수정하기</a> <!-- 요기에 href="" 를 작성하면 get방식이기 떄문에 노출된다. -->
-	                <a class="btn btn-danger" onclick="">삭제하기</a>
-            </div><br><br>
+			<c:if test="${loginMember.userId eq b.boardWriter }">
+	            <div align="center">
+	                <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
+		                <a class="btn btn-primary" onclick="postFormSubmit(1);" >수정하기</a> <!-- 요기에 href="" 를 작성하면 get방식이기 떄문에 노출된다. -->
+		                <a class="btn btn-danger" onclick="postFormSubmit(2);" >삭제하기</a>
+	            </div><br><br>
+	            
+	            <form id="postForm" action="" method="post">
+	            	<input type="hidden" name="bno"  value="${b.boardNo}">
+	            	<input type="hidden" name="filePath"  value="${b.changeName}">
+	            </form>
+	            
+	            <script>
+	            	function postFormSubmit(num){
+	            		if(num == 1){//수정하기 클릭시
+	            			$("#postForm").attr("action","updateForm.bo").submit();
+	            		}else{//삭제하기 클릭시
+	            			$("#postForm").attr("action","delete.bo").submit();
+	            		}
+	            	}
+	            </script>
+	           </c:if>
             
     
 

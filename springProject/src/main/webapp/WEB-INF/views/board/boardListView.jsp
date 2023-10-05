@@ -88,7 +88,7 @@
             </table>
             <br>
 			
-			<script type="text/javascript">
+			<script>
 				$(function(){
 					$("#boardList>tbody>tr").click(function(){
 						location.href='detail.bo?bno='+ $(this).children(".bno").text();
