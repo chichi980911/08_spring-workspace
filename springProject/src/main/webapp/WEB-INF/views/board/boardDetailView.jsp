@@ -121,6 +121,29 @@
         </div>
         <br><br>
     </div>
+    
+    <script>
+    	$(function(){
+    		selectReplyList();
+    	})
+    	
+    	function selectReplyList(){
+    		$.ajax({
+    			url:"rlist.bo",
+    			data:{bno:${b.boardNo}},
+    			success:function(list){
+    				
+    				console.log(list);
+    				
+    			},error:function(){
+    				console.log("댓글리스트 조회용 ajax 통신 실패")
+    			}
+    		})
+    		
+    	}
+    	
+    	
+    </script>
 
     <!-- 이쪽에 푸터바 포함할꺼임 -->
     <jsp:include page="../common/footer.jsp"/>

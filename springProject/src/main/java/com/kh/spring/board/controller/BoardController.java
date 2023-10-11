@@ -15,11 +15,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.spring.board.model.service.BoardServiceImpl;
 import com.kh.spring.board.model.vo.Board;
+import com.kh.spring.board.model.vo.Reply;
 import com.kh.spring.common.model.vo.PageInfo;
 import com.kh.spring.common.template.PageNation;
 
@@ -251,6 +254,14 @@ public class BoardController {
 				model.addAttribute("errorMsg","수정 실패");
 				return "common/errorPage";
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="rlist.bo", produces="application/json; charset=UTF-8")
+	public String ajaxSelectReplyList(int bno) {
+		ArrayList<Reply> list = bservice.selectReplyList(bno);
+		
+		return new Gson().toJson(list);
 	}
 }
 	
