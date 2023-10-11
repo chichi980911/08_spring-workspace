@@ -121,5 +121,22 @@
 		order
 			by reply_no desc
 	</select>
+	
+	<insert id="insertReply">
+		insert
+			into reply
+			(
+				reply_no,
+				reply_content,
+				ref_bno,
+				reply_writer
+			)values
+			(
+				seq_rno.nextval,
+				#{replyContent},
+				#{refBoardNo},
+				#{replyWriter}
+			)
+	</insert>
 </mapper>
 
